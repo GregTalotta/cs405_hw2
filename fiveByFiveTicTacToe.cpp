@@ -13,21 +13,30 @@ using std::ostream;
 #include <cctype>
 using std::toupper;
 #include <string>
-using std::stoi;
 using std::string;
 #include <fstream>
 using std::fstream;
-#include <limits>
 #include <chrono>
 #include <thread>
 
 char getSingleChar();
 int getSingleInt(char min, char max);
-int evaluate(vector<vector<char>> &playingBoard, char piece, int x, int y);
 fstream writeFile();
 bool validMove(vector<vector<char>> &playingBoard, int x, int y);
 int checkBoard(vector<vector<char>> &playingBoard, int x, int y, char piece, int max);
 void printBoard(vector<vector<char>> &playingBoard, ostream &os);
+int playerTurn(vector<vector<char>> &playingBoard, char piece, fstream &save);
+int aroundPiece(vector<vector<char>> &playingBoard, int x, int y, char piece);
+bool boardBlank(vector<vector<char>> &playingBoard);
+char changePiece(char piece);
+int minimax(vector<vector<char>> &playingBoard, int depth, bool maximizing, char piece, int lastx, int lasty);
+int evaluate(vector<vector<char>> &playingBoard, char piece, int x, int y);
+int botTurn(vector<vector<char>> &playingBoard, char piece, fstream &save);
+bool win(fstream &save, int player, int bot);
+void gameLoop(fstream &save, bool first, bool &bot2);
+void startGame();
+void readFile();
+void playGame();
 
 char getSingleChar()
 {

@@ -37,6 +37,7 @@ void gameLoop(fstream &save, bool first, bool &bot2);
 void startGame();
 void readFile();
 void playGame();
+int calcBoards=0;
 
 char getSingleChar()
 {
@@ -324,6 +325,7 @@ int minimax(vector<vector<char>> &playingBoard, int depth, bool maximizing, char
         }
     }
 
+    ++calcBoards;
     if (maximizing)
     {
         int bestx;
@@ -387,7 +389,7 @@ int evaluate(vector<vector<char>> &playingBoard, char piece, int x, int y)
     }
     if (checkBoard(playingBoard, x, y, piece, 4) == 2)
     {
-        return 900;
+        modifier += 900;
     }
     else if (checkBoard(playingBoard, x, y, piece, 3) == 2)
     {
@@ -458,6 +460,7 @@ int botTurn(vector<vector<char>> &playingBoard, char piece, fstream &save)
     int bestx;
     int besty;
     int bestScore = -1000000000;
+    calcBoards = 0;
     if (boardBlank(playingBoard))
     {
         bestx = 2;
@@ -489,6 +492,7 @@ int botTurn(vector<vector<char>> &playingBoard, char piece, fstream &save)
             }
         }
     }
+    // cout << calcBoards << endl; // how many board were proccesed for this turn
     playingBoard[besty][bestx] = piece;
     printBoard(playingBoard, cout);
     if (save)

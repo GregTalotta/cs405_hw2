@@ -8,7 +8,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::getline;
-using std::istream;
 using std::ostream;
 #include <cctype>
 using std::toupper;
@@ -18,26 +17,22 @@ using std::string;
 using std::fstream;
 #include <chrono>
 #include <thread>
+#include <memory>
+using std::shared_ptr;
+#include "player.h"
 
 char getSingleChar();
 int getSingleInt(char min, char max);
 fstream writeFile();
-bool validMove(vector<vector<char>> &playingBoard, int x, int y);
-int checkBoard(vector<vector<char>> &playingBoard, int x, int y, char piece, int max);
 void printBoard(vector<vector<char>> &playingBoard, ostream &os);
-int playerTurn(vector<vector<char>> &playingBoard, char piece, fstream &save);
-int aroundPiece(vector<vector<char>> &playingBoard, int x, int y, char piece);
-bool boardBlank(vector<vector<char>> &playingBoard);
-char changePiece(char piece);
-int minimax(vector<vector<char>> &playingBoard, int depth, bool maximizing, char piece, int lastx, int lasty);
-int evaluate(vector<vector<char>> &playingBoard, char piece, int x, int y);
-int botTurn(vector<vector<char>> &playingBoard, char piece, fstream &save);
 bool win(fstream &save, int player, int bot);
 void gameLoop(fstream &save, bool first, bool &bot2);
 void startGame();
 void readFile();
 void playGame();
-int calcBoards=0;
+
+int _calcBoards = 0;
+vector<shared_ptr<Player>> _players;
 
 char getSingleChar()
 {
@@ -61,137 +56,6 @@ int getSingleInt(char min, char max)
         return getSingleInt(min, max);
     }
     return (int)in - 48;
-}
-
-fstream writeFile()
-{
-    fstream save;
-    save.open("save_game.txt", std::ios::out | std::ios::trunc);
-    if (!save)
-    {
-        cout << "File not created!" << endl;
-    }
-    else
-    {
-        cout << "File created successfully!" << endl;
-        return save;
-    }
-}
-
-bool validMove(vector<vector<char>> &playingBoard, int x, int y)
-{
-    return playingBoard[y][x] == ' ';
-}
-
-int checkBoard(vector<vector<char>> &playingBoard, int x, int y, char piece, int max)
-{
-    //tie
-    bool end = true;
-    for (int i = 0; i < 5; ++i)
-    {
-        for (int j = 0; j < 5; ++j)
-        {
-            if (playingBoard[i][j] == ' ')
-            {
-                end = false;
-            }
-        }
-    }
-    if (end)
-    {
-        return 3;
-    }
-
-    //check row
-    int count = 0;
-    for (int i = 0; i < 5; ++i)
-    {
-        if (playingBoard[y][i] == piece)
-        {
-            ++count;
-        }
-        else
-        {
-            count = 0;
-        }
-        if (count == max)
-        {
-            return 2;
-        }
-    }
-    //check column
-    count = 0;
-    for (int i = 0; i < 5; ++i)
-    {
-        if (playingBoard[i][x] == piece)
-        {
-
-            ++count;
-        }
-        else
-        {
-            count = 0;
-        }
-        if (count == max)
-        {
-            return 2;
-        }
-    }
-    //diagnol down
-    count = 0;
-    int ddy = y;
-    int ddx = x;
-    while ((ddy > 0) && (ddx > 0))
-    {
-
-        --ddy;
-        --ddx;
-    }
-    while ((ddy < 5) && (ddx < 5))
-    {
-
-        if (playingBoard[ddy][ddx] == piece)
-        {
-            ++count;
-        }
-        else
-        {
-            count = 0;
-        }
-        ++ddx;
-        ++ddy;
-        if (count == max)
-        {
-            return 2;
-        }
-    }
-    //diagnol up
-    count = 0;
-    int duy = y;
-    int dux = x;
-    while ((duy < 4) && (dux > 0))
-    {
-        ++duy;
-        --dux;
-    }
-    while ((duy >= 0) && (dux < 5))
-    {
-        if (playingBoard[duy][dux] == piece)
-        {
-            ++count;
-        }
-        else
-        {
-            count = 0;
-        }
-        ++dux;
-        --duy;
-        if (count == max)
-        {
-            return 2;
-        }
-    }
-    return 0;
 }
 
 void printBoard(vector<vector<char>> &playingBoard, ostream &os)
@@ -220,317 +84,64 @@ void printBoard(vector<vector<char>> &playingBoard, ostream &os)
     return;
 }
 
-int playerTurn(vector<vector<char>> &playingBoard, char piece, fstream &save)
+fstream writeFile()
 {
-    cout << "Enter the column (1-5): FF to quit" << endl;
-    int x = getSingleInt('1', '5') - 1;
-    if (x == -2)
+    fstream save;
+    save.open("save_game.txt", std::ios::out | std::ios::trunc);
+    if (!save)
     {
-        return 1;
-    }
-    cout << "Enter the row (1-5): FF to quit" << endl;
-    int y = getSingleInt('1', '5') - 1;
-    if (y == -2)
-    {
-        return 1;
-    }
-    if (validMove(playingBoard, x, y))
-    {
-        playingBoard[y][x] = piece;
-        printBoard(playingBoard, cout);
-        if (save)
-            printBoard(playingBoard, save);
-        return checkBoard(playingBoard, x, y, piece, 4);
+        cout << "File not created!" << endl;
     }
     else
     {
-        cout << "Enter Valid Position" << endl;
-        playerTurn(playingBoard, piece, save);
+        cout << "File created successfully!" << endl;
+        return save;
     }
 }
 
-int aroundPiece(vector<vector<char>> &playingBoard, int x, int y, char piece)
+bool win(fstream &save, int player1State, int player2State, bool first)
 {
-    int countTotal = 0;
-    int found = 0;
-    for (int ny = 0; ny < 5; ++ny)
+    if (player1State == 1)
     {
-        for (int nx = 0; nx < 5; ++nx)
-        {
-            if (((ny >= y - 1) && (ny <= y + 1)) && ((nx >= x - 1) && (nx <= x + 1)))
-            {
-                if ((ny != y) && (nx != x))
-                {
-                    ++countTotal;
-                    if (playingBoard[ny][nx] != piece)
-                    {
-                        continue;
-                    }
-                    ++found;
-                }
-            }
-        }
-    }
-    return found;
-}
-
-bool boardBlank(vector<vector<char>> &playingBoard)
-{
-    for (int ny = 0; ny < 5; ++ny)
-    {
-        for (int nx = 0; nx < 5; ++nx)
-        {
-            if (playingBoard[ny][nx] != ' ')
-            {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-char changePiece(char piece)
-{
-    if (piece == 'x')
-    {
-        return 'o';
-    }
-    return 'x';
-}
-
-int minimax(vector<vector<char>> &playingBoard, int depth, bool maximizing, char piece, int lastx, int lasty)
-{
-    int check = checkBoard(playingBoard, lastx, lasty, changePiece(piece), 4);
-    if (check == 3)
-    {
-        return 0;
-    }
-    else if ((check == 2) && (!maximizing))
-    {
-        return 10000;
-    }
-    else if ((check == 2) && (maximizing))
-    {
-        return -10000;
-    }
-    if (depth >= 3)
-    {
-        if (!maximizing)
-        {
-            return evaluate(playingBoard, changePiece(piece), lastx, lasty);
-        }
-        else
-        {
-            return -evaluate(playingBoard, changePiece(piece), lastx, lasty);
-        }
-    }
-
-    ++calcBoards;
-    if (maximizing)
-    {
-        int bestx;
-        int besty;
-        int bestScore = -10000000;
-        for (int y = 0; y < 5; ++y)
-        {
-            for (int x = 0; x < 5; ++x)
-            {
-                if (validMove(playingBoard, x, y))
-                {
-                    playingBoard[y][x] = piece;
-                    int score = minimax(playingBoard, depth + 1, false, changePiece(piece), x, y);
-                    if (score > bestScore)
-                    {
-                        bestScore = score;
-                        bestx = x;
-                        besty = y;
-                    }
-                    playingBoard[y][x] = ' ';
-                }
-            }
-        }
-        return bestScore;
-    }
-    else
-    {
-        int bestx;
-        int besty;
-        int bestScore = 10000000;
-        for (int y = 0; y < 5; ++y)
-        {
-            for (int x = 0; x < 5; ++x)
-            {
-                if (validMove(playingBoard, x, y))
-                {
-                    playingBoard[y][x] = piece;
-                    int score = minimax(playingBoard, depth + 1, true, changePiece(piece), x, y);
-
-                    if (score < bestScore)
-                    {
-                        bestScore = score;
-                        bestx = x;
-                        besty = y;
-                    }
-                    playingBoard[y][x] = ' ';
-                }
-            }
-        }
-        return bestScore;
-    }
-}
-
-int evaluate(vector<vector<char>> &playingBoard, char piece, int x, int y)
-{
-    int modifier = 10;
-    //check if it makes you win
-    if ((y > 0) && (y < 4) && (x > 0) && (x < 4))
-    {
-        modifier += 10;
-    }
-    if (checkBoard(playingBoard, x, y, piece, 4) == 2)
-    {
-        modifier += 900;
-    }
-    else if (checkBoard(playingBoard, x, y, piece, 3) == 2)
-    {
-        modifier += 700;
-    }
-    //check if it stops the other player from winning
-    playingBoard[y][x] = changePiece(piece);
-    if (checkBoard(playingBoard, x, y, changePiece(piece), 4) == 2)
-    {
-        modifier += 800;
-    }
-    else if (checkBoard(playingBoard, x, y, changePiece(piece), 3) == 2)
-    {
-        modifier += 700;
-    }
-    playingBoard[y][x] = piece;
-    //check to see if in middle
-    for (int i = 1; i < 4; ++i)
-    {
-        for (int j = 1; j < 4; ++j)
-        {
-            bool midx = ((j == 1) || (j == 3));
-            bool midy = ((i == 1) || (i == 3));
-            if (playingBoard[j][i] == piece)
-            {
-                ++modifier;
-                if (midx && midy)
-                {
-                    ++modifier;
-                }
-            }
-            if (playingBoard[j][i] == changePiece(piece))
-            {
-                --modifier;
-                if (midx && midy)
-                {
-                    --modifier;
-                }
-            }
-        }
-    }
-    //middle is good
-    if ((x == 2) && (y == 2))
-    {
-        modifier += 197;
-    }
-    //*******There are no pieces of the same type next to eachother options******
-    //check how many enimies are around this spot, the more the better
-    int numEnimies = aroundPiece(playingBoard, x, y, changePiece(piece));
-    if (numEnimies > 0)
-    {
-        modifier += 2 * numEnimies;
-    }
-    //add around your other pieces
-    int numAlies = aroundPiece(playingBoard, x, y, piece);
-    if (numAlies > 0)
-    {
-        modifier += numAlies;
-    }
-    //If it is none of the others make it have a random value
-    return modifier;
-}
-
-int botTurn(vector<vector<char>> &playingBoard, char piece, fstream &save)
-{
-    //needs at least c++ 11
-    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-    int bestx;
-    int besty;
-    int bestScore = -1000000000;
-    calcBoards = 0;
-    if (boardBlank(playingBoard))
-    {
-        bestx = 2;
-        besty = 2;
-        playingBoard[besty][bestx] = piece;
-        printBoard(playingBoard, cout);
-        if (save)
-            printBoard(playingBoard, save);
-        return checkBoard(playingBoard, bestx, besty, piece, 4);
-    }
-    else
-    {
-        for (int y = 0; y < 5; ++y)
-        {
-            for (int x = 0; x < 5; ++x)
-            {
-                if (validMove(playingBoard, x, y))
-                {
-                    playingBoard[y][x] = piece;
-                    int score = minimax(playingBoard, 0, false, changePiece(piece), x, y);
-                    if (score > bestScore)
-                    {
-                        bestScore = score;
-                        bestx = x;
-                        besty = y;
-                    }
-                    playingBoard[y][x] = ' ';
-                }
-            }
-        }
-    }
-    // cout << calcBoards << endl; // how many board were proccesed for this turn
-    playingBoard[besty][bestx] = piece;
-    printBoard(playingBoard, cout);
-    if (save)
-        printBoard(playingBoard, save);
-    return checkBoard(playingBoard, bestx, besty, piece, 4);
-}
-
-bool win(fstream &save, int player, int bot)
-{
-    if (player == 1)
-    {
-        cout << "\nPlayer2 Forfits, Bot1 wins\n"
+        cout << "\n"
+             << _players[first]->_name << " Forfits, " << _players[!first]->_name << " wins\n"
              << endl;
         if (save)
         {
-            save << "Player2 Forfits, Bot1 wins" << endl;
+            save << _players[first]->_name << " Forfits, " << _players[!first]->_name << " wins" << endl;
         }
         return true;
     }
-    if (player == 2)
+    if (player2State == 1)
     {
-        cout << "Player2 wins" << endl;
+        cout << "\n"
+             << _players[!first]->_name << " Forfits, " << _players[first]->_name << " wins\n"
+             << endl;
         if (save)
         {
-            save << "Player2 winds" << endl;
+            save << _players[!first]->_name << " Forfits, " << _players[first]->_name << " wins" << endl;
         }
         return true;
     }
-    if (bot == 2)
+    if (player1State == 2)
     {
-        cout << "Bot1 wins" << endl;
+        cout << _players[first]->_name << " wins" << endl;
         if (save)
         {
-            save << "Bot1 wins" << endl;
+            save << _players[first]->_name << " wins" << endl;
         }
         return true;
     }
-    if ((player == 3) || (bot == 3))
+    if (player2State == 2)
+    {
+        cout << _players[!first]->_name << " wins" << endl;
+        if (save)
+        {
+            save << _players[!first]->_name << " wins" << endl;
+        }
+        return true;
+    }
+    if ((player1State == 3) || (player2State == 3))
     {
         cout << "Draw, no winner" << endl;
         if (save)
@@ -542,7 +153,7 @@ bool win(fstream &save, int player, int bot)
     return false;
 }
 
-void gameLoop(fstream &save, bool first, bool &bot2)
+void gameLoop(fstream &save, bool first)
 {
     bool done = false;
     int turn = 0;
@@ -556,79 +167,35 @@ void gameLoop(fstream &save, bool first, bool &bot2)
     printBoard(playingBoard, cout);
     if (save)
         printBoard(playingBoard, save);
-    int playerState = 0;
-    int botState = 0;
+    int player1State = 0;
+    int player2State = 0;
     while (!done)
     {
         ++turn;
-        if ((turn == 14) && (playerState != 2) && (botState != 2))
+        if ((turn == 14) && (player1State != 2) && (player2State != 2))
         {
-            playerState = 3;
-            botState = 3;
+            player1State = 3;
+            player2State = 3;
         }
-        bool won = win(save, playerState, botState);
+        bool won = win(save, player1State, player2State, first);
         if (won)
         {
             return;
         }
-        if (first)
+
+        player1State = _players[first]->turn(playingBoard, _players[first]->_piece);
+        printBoard(playingBoard, cout);
+        if (save)
+            printBoard(playingBoard, save);
+        if ((player1State == 1)||(turn == 13))
         {
-            if (!bot2)
-            {
-                cout << "Player's turn" << endl;
-                if (save)
-                    save << "Player's turn" << endl;
-                playerState = playerTurn(playingBoard, 'x', save);
-                if (playerState == 1)
-                {
-                    continue;
-                }
-            }
-            else if (bot2)
-            {
-                cout << "Bot 2's turn" << endl;
-                if (save)
-                    save << "Bot 2's turn" << endl;
-                playerState = botTurn(playingBoard, 'x', save);
-            }
-            if ((playerState == 2) || (turn == 13))
-            {
-                continue;
-            }
-            cout << "Bot 1's turn" << endl;
-            if (save)
-                save << "Bot 1's turn" << endl;
-            botState = botTurn(playingBoard, 'o', save);
+            continue;
         }
-        if (!first)
-        {
-            cout << "Bot 1's turn" << endl;
-            if (save)
-                save << "Bot 1's turn" << endl;
-            botState = botTurn(playingBoard, 'x', save);
-            if ((botState == 2) || (turn == 13))
-            {
-                continue;
-            }
-            if (!bot2)
-            {
-                cout << "Player's turn" << endl;
-                if (save)
-                    save << "Player's turn" << endl;
-                playerState = playerTurn(playingBoard, 'o', save);
-                if (playerState == 1)
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                cout << "Bot 2's turn" << endl;
-                if (save)
-                    save << "Bot 2's turn" << endl;
-                playerState = botTurn(playingBoard, 'o', save);
-            }
-        }
+
+        player2State = _players[!first]->turn(playingBoard, _players[!first]->_piece);
+        printBoard(playingBoard, cout);
+        if (save)
+            printBoard(playingBoard, save);
     }
 }
 
@@ -644,27 +211,40 @@ void startGame()
         savelog = writeFile();
         savelog << "\n\nSaved game!" << endl;
     }
-    cout << "How many bots should there be? (1/2)" << endl;
-    int botCount = getSingleInt('1', '2');
-    if (botCount == 2)
+    vector<vector<shared_ptr<Player>>> options = {
+        {makePlayer(), makePlayer()},
+        {makePlayer(), makeMinimaxBot()},
+        {makeMinimaxBot(), makeMinimaxBot()}};
+    for (int i = 0; i < options.size(); ++i)
     {
-        isBot2 = true;
+        cout << i + 1 << ": " << options[i][0]->_name << " vs " << options[i][1]->_name << endl;
     }
+    cout << "Enter the number of what you would like to play." << endl;
+    int gameType = getSingleInt('1', '3') - 1;
+    _players = options[gameType];
     srand(time(NULL));
     bool first = rand() % 2;
-    if (first)
+    if (!first)
     {
-        cout << "Player goes first" << endl;
+        _players[0]->_name += " 1";
+        _players[0]->_piece = 'x';
+        _players[1]->_name += " 2";
+        _players[1]->_piece = 'o';
+        cout << _players[0]->_name << " goes first" << endl;
         if (savelog)
-            savelog << "Player goes first" << endl;
+            savelog << _players[0]->_name << " goes first" << endl;
     }
     else
     {
-        cout << "Bot goes first" << endl;
+        _players[0]->_name += " 2";
+        _players[0]->_piece = 'o';
+        _players[1]->_name += " 1";
+        _players[1]->_piece = 'x';
+        cout << _players[1]->_name << " goes first" << endl;
         if (savelog)
-            savelog << "Player goes first" << endl;
+            savelog << _players[1]->_name << " goes first" << endl;
     }
-    gameLoop(savelog, first, isBot2);
+    gameLoop(savelog, first);
     savelog.close();
     return;
 }

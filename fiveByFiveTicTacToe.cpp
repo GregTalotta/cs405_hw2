@@ -18,8 +18,10 @@ using std::fstream;
 #include <chrono>
 #include <thread>
 #include <memory>
+using std::make_shared;
 using std::shared_ptr;
 #include "player.h"
+#include "tree.h"
 
 char getSingleChar();
 int getSingleInt(char min, char max);
@@ -164,6 +166,9 @@ void gameLoop(fstream &save, bool first)
         {' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' '},
     };
+    shared_ptr<BoardNode> rootNode = make_shared<BoardNode>(BoardNode(playingBoard, 'x'));
+    rootNode->addLayer(rootNode);
+    rootNode->growTree(3);
     printBoard(playingBoard, cout);
     if (save)
         printBoard(playingBoard, save);
@@ -187,7 +192,7 @@ void gameLoop(fstream &save, bool first)
         printBoard(playingBoard, cout);
         if (save)
             printBoard(playingBoard, save);
-        if ((player1State == 1)||(turn == 13))
+        if ((player1State == 1) || (turn == 13))
         {
             continue;
         }

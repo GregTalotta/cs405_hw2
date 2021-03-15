@@ -14,6 +14,7 @@ protected:
     int getSingleInt(char min, char max);
     bool validMove(std::vector<std::vector<char>> &playingBoard, int x, int y);
     int _calcBoards = 0;
+    int _calcBoardsLifeTime = 0;
     char changePiece(char piece);
 
 public:

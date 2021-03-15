@@ -20,9 +20,12 @@ MonteCarloBot::MonteCarloBot()
 
 int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece)
 {
+    _calcBoards = 0;
     std::shared_ptr<BoardNode> root = make_shared<BoardNode>(BoardNode(playingBoard, changePiece(piece)));
     root->addLayer(root);
+    _calcBoards += root->children.size() + 1;
     if(root->children.size()==1){
+        _calcBoardsLifeTime += _calcBoards;
         playingBoard[root->children[0]->y][root->children[0]->x]=_piece;
         return checkBoard(playingBoard, root->children[0]->x, root->children[0]->y, _piece, 4);
     }
@@ -41,6 +44,7 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
         {
             exspansionPhase(goodNode);
         }
+        _calcBoards += goodNode->children.size();
         shared_ptr<BoardNode> exploringNode = goodNode;
         if (exploringNode->children.size() > 0)
         {
@@ -59,6 +63,7 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
     int ny = bestNode->y;
     root.reset();
     bestNode.reset();
+    _calcBoardsLifeTime += _calcBoards;
     playingBoard[ny][nx] = piece;
     return checkBoard(playingBoard, nx, ny, _piece, 4);
 }

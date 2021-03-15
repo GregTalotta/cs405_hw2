@@ -242,5 +242,6 @@ int MinimaxBot::turn(vector<vector<char>> &playingBoard, char piece)
         }
     }
     playingBoard[besty][bestx] = piece;
+    _calcBoardsLifeTime += _calcBoards;
     return checkBoard(playingBoard, bestx, besty, piece, 4);
 }

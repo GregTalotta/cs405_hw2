@@ -1,27 +1,47 @@
 #include "tree.h"
+using std::rand;
+
+std::shared_ptr<BoardNode> BoardNode::getRandomChild()
+{
+    int pos = rand() % (int)children.size();
+    return children[pos];
+}
+
+std::shared_ptr<BoardNode> BoardNode::getBestChild()
+{
+    std::shared_ptr<BoardNode> best = children[0];
+    for (int i = 1; i < children.size(); ++i)
+    {
+        if (children[i]->value() > best->value())
+        {
+            best = children[i];
+        }
+    }
+    return best;
+}
 
 BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p)
 {
     board = nboard;
-    data.piece = p;
+    data->piece = p;
 }
 
-BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p, std::shared_ptr<BoardNode> pnode, int posx, int posy)
+BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p, std::shared_ptr<BoardNode> &pnode, int posx, int posy)
 {
     board = nboard;
-    parrent = pnode->data;
-    data.piece = p;
-    data.x = posx;
-    data.y = posy;
+    parrent = pnode;
+    data->piece = p;
+    data->x = posx;
+    data->y = posy;
 }
 
 double BoardNode::value()
 {
-    if (data.visits == 0)
+    if (data->visits == 0)
     {
         return 0;
     }
-    return ((data.wins + data.draws) / data.visits) + (sqrt(2) * sqrt(log(parrent.visits) / data.visits));
+    return ((data->wins + data->draws) / data->visits);
 }
 
 char BoardNode::changePiece(char piece)
@@ -33,7 +53,7 @@ char BoardNode::changePiece(char piece)
     return 'x';
 }
 
-void BoardNode::addLayer(std::shared_ptr<BoardNode> base)
+void BoardNode::addLayer(std::shared_ptr<BoardNode> &base)
 {
     for (int j = 0; j < board.size(); ++j)
     {
@@ -41,8 +61,8 @@ void BoardNode::addLayer(std::shared_ptr<BoardNode> base)
         {
             if (board[j][i] == ' ')
             {
-                board[j][i] = changePiece(data.piece);
-                children.push_back(std::make_shared<BoardNode>(BoardNode(board, changePiece(data.piece), base, i, j)));
+                board[j][i] = changePiece(data->piece);
+                children.push_back(std::make_unique<BoardNode>(BoardNode(board, changePiece(data->piece), base, i, j)));
                 board[j][i] = ' ';
             }
         }
@@ -55,9 +75,9 @@ void BoardNode::growTree(int depth)
     {
         return;
     }
-    for (auto i : children)
+    for (int i = 0; i < children.size(); ++i)
     {
-        i->addLayer(i);
-        i->growTree(depth - 1);
+        children[i]->addLayer(children[i]);
+        children[i]->growTree(depth - 1);
     }
 }

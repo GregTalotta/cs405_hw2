@@ -20,8 +20,12 @@ using std::fstream;
 #include <memory>
 using std::make_shared;
 using std::shared_ptr;
+using std::make_unique;
+using std::unique_ptr;
 #include "player.h"
+#include "minimaxBot.h"
 #include "tree.h"
+
 
 char getSingleChar();
 int getSingleInt(char min, char max);
@@ -166,9 +170,6 @@ void gameLoop(fstream &save, bool first)
         {' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' '},
     };
-    shared_ptr<BoardNode> rootNode = make_shared<BoardNode>(BoardNode(playingBoard, 'x'));
-    rootNode->addLayer(rootNode);
-    rootNode->growTree(3);
     printBoard(playingBoard, cout);
     if (save)
         printBoard(playingBoard, save);

@@ -7,6 +7,7 @@
 #include <memory>
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 
 struct nodeData
 {
@@ -15,7 +16,6 @@ struct nodeData
     int x;
     double visits = 0;
     double wins = 0;
-    double losses = 0;
     double draws = 0;
 };
 
@@ -25,15 +25,17 @@ protected:
     char changePiece(char piece);
 
 public:
+    std::shared_ptr<BoardNode> parrent;
+    std::shared_ptr<nodeData> data = std::make_shared<nodeData>();
     std::vector<std::vector<char>> board;
     BoardNode(std::vector<std::vector<char>> nboard, char);
-    BoardNode(std::vector<std::vector<char>> nboard, char, std::shared_ptr<BoardNode> pnode, int, int);
+    BoardNode(std::vector<std::vector<char>> nboard, char, std::shared_ptr<BoardNode> &pnode, int, int);
     std::vector<std::shared_ptr<BoardNode>> children;
-    nodeData parrent;
-    nodeData data;
-    void addLayer(std::shared_ptr<BoardNode> base);
+    void addLayer(std::shared_ptr<BoardNode> &base);
     void growTree(int depth);
     double value();
+    std::shared_ptr<BoardNode> getRandomChild();
+    std::shared_ptr<BoardNode> getBestChild();
 };
 
 #endif

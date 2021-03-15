@@ -9,7 +9,7 @@
 class MonteCarloBot : public Player
 {
 protected:
-    double time = 5.0;
+    double _time = 5.0;
     void findNextMove(std::vector<std::vector<char>> &playingBoard);
     std::shared_ptr<BoardNode> selectionPhase(std::shared_ptr<BoardNode> root);
     double utcValue(std::shared_ptr<BoardNode> node);

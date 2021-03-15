@@ -26,7 +26,7 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
         playingBoard[root->children[0]->y][root->children[0]->x]=_piece;
         return checkBoard(playingBoard, root->children[0]->x, root->children[0]->y, _piece, 4);
     }
-    if (time <= 0.0)
+    if (_time <= 0.0)
     {
         //cout some stuff
         //setTime()
@@ -34,7 +34,7 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
     auto startTime = std::chrono::system_clock::now();
     auto endTime = std::chrono::system_clock::now();
     std::chrono::duration<double> diff = endTime - startTime;
-    while (diff.count() < time)
+    while (diff.count() < _time)
     {
         shared_ptr<BoardNode> goodNode = selectionPhase(root);
         if (true) //can exspand condition

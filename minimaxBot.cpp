@@ -79,7 +79,7 @@ int MinimaxBot::minimax(vector<vector<char>> &playingBoard, int depth, bool maxi
         }
     }
 
-    ++calcBoards;
+    ++_calcBoards;
     if (maximizing)
     {
         int bestx;
@@ -212,7 +212,7 @@ int MinimaxBot::turn(vector<vector<char>> &playingBoard, char piece)
     int bestx;
     int besty;
     int bestScore = -1000000000;
-    calcBoards = 0;
+    _calcBoards = 0;
     if (boardBlank(playingBoard))
     {
         bestx = 2;

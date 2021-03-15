@@ -19,7 +19,7 @@ public:
     double visits = 0.0;
     double wins = 0.0;
     double draws = 0.0;
-    std::shared_ptr<BoardNode> parrent;
+    std::shared_ptr<BoardNode> parent;
     std::vector<std::vector<char>> board;
     BoardNode(std::vector<std::vector<char>> nboard, char);
     BoardNode(std::vector<std::vector<char>> nboard, char, std::shared_ptr<BoardNode> pnode, int, int);

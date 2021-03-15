@@ -95,7 +95,7 @@ double MonteCarloBot::utcValue(std::shared_ptr<BoardNode> node)
     {
         return 100000;
     }
-    return ((node->wins + node->draws) / node->visits) + (sqrt(2) * sqrt(log(node->parrent->visits) / node->visits));
+    return ((node->wins + node->draws) / node->visits) + (sqrt(2) * sqrt(log(node->parent->visits) / node->visits));
 }
 
 void MonteCarloBot::exspansionPhase(std::shared_ptr<BoardNode> node)
@@ -110,7 +110,7 @@ int MonteCarloBot::simulationPhase(std::shared_ptr<BoardNode> node)
 {
     //This is the problem area
     std::vector<vector<char>> tempBoard = node->board;
-    int pastStatus = checkBoard(node->parrent->board, node->parrent->x, node->parrent->y, node->parrent->piece, 4);
+    int pastStatus = checkBoard(node->parent->board, node->parent->x, node->parent->y, node->parent->piece, 4);
     if(pastStatus == 2){
         return pastStatus;
     }
@@ -154,7 +154,7 @@ void MonteCarloBot::backPropogation(std::shared_ptr<BoardNode> node, int state)
                 ++tempNode->draws;
             }
         }
-        tempNode = tempNode->parrent;
+        tempNode = tempNode->parent;
     }
     return;
 }

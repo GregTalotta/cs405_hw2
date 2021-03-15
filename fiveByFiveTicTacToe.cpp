@@ -195,10 +195,10 @@ void gameLoop(fstream &save, bool first)
             return;
         }
 
-        cout << _players[first]->_name << "'s turn. Piece: " << _players[first]->_piece << "\n\n"
+        cout << "Currently " << _players[first]->_name << "'s turn. Piece: " << _players[first]->_piece << "\n\n"
              << endl;
         if (save)
-            save << _players[first]->_name << "'s turn. Piece: " << _players[first]->_piece << "\n\n"
+            save << "Currently " << _players[first]->_name << "'s turn. Piece: " << _players[first]->_piece << "\n\n"
                  << endl;
         player1State = _players[first]->turn(playingBoard, _players[first]->_piece);
         printBoard(playingBoard, cout);
@@ -209,10 +209,10 @@ void gameLoop(fstream &save, bool first)
             continue;
         }
 
-        cout << _players[!first]->_name << "'s turn. Piece: " << _players[!first]->_piece << "\n\n"
+        cout << "Currently " << _players[!first]->_name << "'s turn. Piece: " << _players[!first]->_piece << "\n\n"
              << endl;
         if (save)
-            save << _players[!first]->_name << "'s turn. Piece: " << _players[!first]->_piece << "\n\n"
+            save << "Currently " << _players[!first]->_name << "'s turn. Piece: " << _players[!first]->_piece << "\n\n"
                  << endl;
         player2State = _players[!first]->turn(playingBoard, _players[!first]->_piece);
         printBoard(playingBoard, cout);
@@ -302,7 +302,8 @@ void readFile()
                 cout << line << endl;
                 ++i;
             }
-            if(i==11){
+            if (i == 11)
+            {
                 cout << line << endl;
             }
             //needs at least c++ 11

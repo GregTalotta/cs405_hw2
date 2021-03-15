@@ -30,7 +30,7 @@ BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p)
 BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p, std::shared_ptr<BoardNode> pnode, int posx, int posy)
 {
     board = nboard;
-    parrent = pnode;
+    parent = pnode;
     piece = p;
     x = posx;
     y = posy;

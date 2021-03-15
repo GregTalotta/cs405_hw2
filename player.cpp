@@ -45,6 +45,7 @@ int Player::getSingleInt(char min, char max)
 
 int Player::turn(vector<vector<char>> &playingBoard, char piece)
 {
+    ++_rounds;
     cout << "Enter the column (1-5): FF to quit" << endl;
     int x = getSingleInt('1', '5') - 1;
     if (x == -2)

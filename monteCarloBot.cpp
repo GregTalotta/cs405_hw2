@@ -18,8 +18,13 @@ MonteCarloBot::MonteCarloBot()
     _name = "Monte Carlo Bot";
 }
 
+void MonteCarloBot::setTime(double in){
+    _time = in;
+}
+
 int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece)
 {
+    ++_rounds;
     _calcBoards = 0;
     std::shared_ptr<BoardNode> root = make_shared<BoardNode>(BoardNode(playingBoard, changePiece(piece)));
     root->addLayer(root);
@@ -31,8 +36,11 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
     }
     if (_time <= 0.0)
     {
-        //cout some stuff
-        //setTime()
+        double in=1.0;
+        std::cout << "How many seconds should the bot have?" << std::endl;
+        std::cin>>in;
+        setTime(in);
+        std::cout << "The bot will play for about "<< _time << " seconds" << std::endl;
     }
     auto startTime = std::chrono::system_clock::now();
     auto endTime = std::chrono::system_clock::now();

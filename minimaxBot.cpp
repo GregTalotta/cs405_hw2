@@ -209,6 +209,7 @@ int MinimaxBot::evaluate(vector<vector<char>> &playingBoard, char piece, int x, 
 
 int MinimaxBot::turn(vector<vector<char>> &playingBoard, char piece)
 {
+    ++_rounds;
     int bestx;
     int besty;
     int bestScore = -1000000000;

@@ -25,12 +25,12 @@ Minimax Bot 1's turn. Piece: x
 -----------------
   |   |   |   |  
 
-Monte Carlo Bot 2's turn. Piece: o
+Minimax Bot 2's turn. Piece: o
 
 
-  |   |   |   |  
+o |   |   |   |  
 -----------------
-  |   | o |   |  
+  |   |   |   |  
 -----------------
   |   | x |   |  
 -----------------
@@ -41,9 +41,9 @@ Monte Carlo Bot 2's turn. Piece: o
 Minimax Bot 1's turn. Piece: x
 
 
-  |   |   |   |  
+o | x |   |   |  
 -----------------
-  | x | o |   |  
+  |   |   |   |  
 -----------------
   |   | x |   |  
 -----------------
@@ -51,290 +51,292 @@ Minimax Bot 1's turn. Piece: x
 -----------------
   |   |   |   |  
 
-Monte Carlo Bot 2's turn. Piece: o
+Minimax Bot 2's turn. Piece: o
 
 
-  |   |   |   |  
+o | x |   |   |  
 -----------------
-  | x | o |   |  
+  | o |   |   |  
 -----------------
   |   | x |   |  
 -----------------
-  |   |   | o |  
+  |   |   |   |  
 -----------------
   |   |   |   |  
 
 Minimax Bot 1's turn. Piece: x
 
 
-x |   |   |   |  
+o | x |   |   |  
 -----------------
-  | x | o |   |  
------------------
-  |   | x |   |  
------------------
-  |   |   | o |  
------------------
-  |   |   |   |  
-
-Monte Carlo Bot 2's turn. Piece: o
-
-
-x |   |   |   |  
------------------
-  | x | o |   |  
+  | o |   |   |  
 -----------------
   |   | x |   |  
 -----------------
-  | o |   | o |  
+  |   |   | x |  
 -----------------
   |   |   |   |  
 
-Minimax Bot 1's turn. Piece: x
+Minimax Bot 2's turn. Piece: o
 
 
-x |   |   |   |  
+o | x |   |   |  
 -----------------
-  | x | o |   |  
------------------
-  |   | x |   |  
------------------
-x | o |   | o |  
------------------
-  |   |   |   |  
-
-Monte Carlo Bot 2's turn. Piece: o
-
-
-x |   |   |   |  
------------------
-  | x | o |   |  
+  | o |   |   |  
 -----------------
   |   | x | o |  
 -----------------
-x | o |   | o |  
+  |   |   | x |  
 -----------------
   |   |   |   |  
 
 Minimax Bot 1's turn. Piece: x
 
 
-x |   |   |   |  
+o | x |   |   |  
 -----------------
-x | x | o |   |  
+x | o |   |   |  
 -----------------
   |   | x | o |  
 -----------------
-x | o |   | o |  
+  |   |   | x |  
 -----------------
   |   |   |   |  
 
-Monte Carlo Bot 2's turn. Piece: o
+Minimax Bot 2's turn. Piece: o
 
 
-x |   |   |   |  
+o | x |   |   |  
 -----------------
-x | x | o |   |  
+x | o |   |   |  
 -----------------
-o |   | x | o |  
+  |   | x | o |  
 -----------------
-x | o |   | o |  
+  |   | o | x |  
 -----------------
   |   |   |   |  
 
 Minimax Bot 1's turn. Piece: x
 
 
+o | x |   |   |  
+-----------------
+x | o |   |   | x
+-----------------
+  |   | x | o |  
+-----------------
+  |   | o | x |  
+-----------------
+  |   |   |   |  
+
+Minimax Bot 2's turn. Piece: o
+
+
+o | x | o |   |  
+-----------------
+x | o |   |   | x
+-----------------
+  |   | x | o |  
+-----------------
+  |   | o | x |  
+-----------------
+  |   |   |   |  
+
+Minimax Bot 1's turn. Piece: x
+
+
+o | x | o |   |  
+-----------------
+x | o |   |   | x
+-----------------
+  |   | x | o |  
+-----------------
+  |   | o | x |  
+-----------------
+  | x |   |   |  
+
+Minimax Bot 2's turn. Piece: o
+
+
+o | x | o |   |  
+-----------------
+x | o |   | o | x
+-----------------
+  |   | x | o |  
+-----------------
+  |   | o | x |  
+-----------------
+  | x |   |   |  
+
+Minimax Bot 1's turn. Piece: x
+
+
+o | x | o |   |  
+-----------------
+x | o |   | o | x
+-----------------
+  |   | x | o |  
+-----------------
+  |   | o | x |  
+-----------------
 x | x |   |   |  
------------------
-x | x | o |   |  
------------------
-o |   | x | o |  
------------------
-x | o |   | o |  
------------------
-  |   |   |   |  
 
-Monte Carlo Bot 2's turn. Piece: o
+Minimax Bot 2's turn. Piece: o
 
 
-x | x |   | o |  
+o | x | o |   |  
 -----------------
-x | x | o |   |  
------------------
-o |   | x | o |  
------------------
-x | o |   | o |  
------------------
-  |   |   |   |  
-
-Minimax Bot 1's turn. Piece: x
-
-
-x | x |   | o |  
------------------
-x | x | o | x |  
------------------
-o |   | x | o |  
------------------
-x | o |   | o |  
------------------
-  |   |   |   |  
-
-Monte Carlo Bot 2's turn. Piece: o
-
-
-x | x |   | o |  
------------------
-x | x | o | x |  
------------------
-o |   | x | o |  
------------------
-x | o |   | o |  
------------------
-  |   |   | o |  
-
-Minimax Bot 1's turn. Piece: x
-
-
-x | x |   | o |  
------------------
-x | x | o | x |  
------------------
-o |   | x | o |  
------------------
-x | o | x | o |  
------------------
-  |   |   | o |  
-
-Monte Carlo Bot 2's turn. Piece: o
-
-
-x | x |   | o |  
------------------
-x | x | o | x | o
------------------
-o |   | x | o |  
------------------
-x | o | x | o |  
------------------
-  |   |   | o |  
-
-Minimax Bot 1's turn. Piece: x
-
-
-x | x |   | o |  
------------------
-x | x | o | x | o
------------------
-o | x | x | o |  
------------------
-x | o | x | o |  
------------------
-  |   |   | o |  
-
-Monte Carlo Bot 2's turn. Piece: o
-
-
-x | x | o | o |  
------------------
-x | x | o | x | o
------------------
-o | x | x | o |  
------------------
-x | o | x | o |  
------------------
-  |   |   | o |  
-
-Minimax Bot 1's turn. Piece: x
-
-
-x | x | o | o |  
------------------
-x | x | o | x | o
------------------
-o | x | x | o |  
------------------
-x | o | x | o |  
+x | o |   | o | x
 -----------------
   |   | x | o |  
-
-Monte Carlo Bot 2's turn. Piece: o
-
-
-x | x | o | o | o
 -----------------
-x | x | o | x | o
+  | o | o | x |  
 -----------------
-o | x | x | o |  
------------------
-x | o | x | o |  
------------------
-  |   | x | o |  
+x | x |   |   |  
 
 Minimax Bot 1's turn. Piece: x
 
 
-x | x | o | o | o
+o | x | o |   |  
 -----------------
-x | x | o | x | o
------------------
-o | x | x | o | x
------------------
-x | o | x | o |  
+x | o |   | o | x
 -----------------
   |   | x | o |  
-
-Monte Carlo Bot 2's turn. Piece: o
-
-
-x | x | o | o | o
 -----------------
-x | x | o | x | o
+  | o | o | x |  
 -----------------
-o | x | x | o | x
+x | x | x |   |  
+
+Minimax Bot 2's turn. Piece: o
+
+
+o | x | o |   |  
 -----------------
-x | o | x | o | o
+x | o |   | o | x
 -----------------
   |   | x | o |  
+-----------------
+  | o | o | x |  
+-----------------
+x | x | x | o |  
 
 Minimax Bot 1's turn. Piece: x
 
 
-x | x | o | o | o
+o | x | o |   |  
 -----------------
-x | x | o | x | o
+x | o |   | o | x
 -----------------
-o | x | x | o | x
+  |   | x | o |  
 -----------------
-x | o | x | o | o
+x | o | o | x |  
 -----------------
-x |   | x | o |  
+x | x | x | o |  
 
-Monte Carlo Bot 2's turn. Piece: o
+Minimax Bot 2's turn. Piece: o
 
 
-x | x | o | o | o
+o | x | o |   |  
 -----------------
-x | x | o | x | o
+x | o |   | o | x
 -----------------
-o | x | x | o | x
+o |   | x | o |  
 -----------------
-x | o | x | o | o
+x | o | o | x |  
 -----------------
-x | o | x | o |  
+x | x | x | o |  
 
 Minimax Bot 1's turn. Piece: x
 
 
-x | x | o | o | o
+o | x | o |   |  
 -----------------
-x | x | o | x | o
+x | o |   | o | x
 -----------------
-o | x | x | o | x
+o |   | x | o | x
 -----------------
-x | o | x | o | o
+x | o | o | x |  
+-----------------
+x | x | x | o |  
+
+Minimax Bot 2's turn. Piece: o
+
+
+o | x | o |   |  
+-----------------
+x | o |   | o | x
+-----------------
+o |   | x | o | x
+-----------------
+x | o | o | x | o
+-----------------
+x | x | x | o |  
+
+Minimax Bot 1's turn. Piece: x
+
+
+o | x | o | x |  
+-----------------
+x | o |   | o | x
+-----------------
+o |   | x | o | x
+-----------------
+x | o | o | x | o
+-----------------
+x | x | x | o |  
+
+Minimax Bot 2's turn. Piece: o
+
+
+o | x | o | x | o
+-----------------
+x | o |   | o | x
+-----------------
+o |   | x | o | x
+-----------------
+x | o | o | x | o
+-----------------
+x | x | x | o |  
+
+Minimax Bot 1's turn. Piece: x
+
+
+o | x | o | x | o
 -----------------
 x | o | x | o | x
+-----------------
+o |   | x | o | x
+-----------------
+x | o | o | x | o
+-----------------
+x | x | x | o |  
+
+Minimax Bot 2's turn. Piece: o
+
+
+o | x | o | x | o
+-----------------
+x | o | x | o | x
+-----------------
+o | o | x | o | x
+-----------------
+x | o | o | x | o
+-----------------
+x | x | x | o |  
+
+Minimax Bot 1's turn. Piece: x
+
+
+o | x | o | x | o
+-----------------
+x | o | x | o | x
+-----------------
+o | o | x | o | x
+-----------------
+x | o | o | x | o
+-----------------
+x | x | x | o | x
 
 Draw, no winner
+Minimax Bot 1 procced 36959 in total, with an average of 2843 per turn.
+Minimax Bot 2 procced 43652 in total, with an average of 3637 per turn.

@@ -181,6 +181,17 @@ void gameLoop(fstream &save, bool first)
         bool won = win(save, player1State, player2State, first);
         if (won)
         {
+            cout << _players[first]->_name << " procced " << _players[first]->_calcBoardsLifeTime << " in total, ";
+            cout << "with an average of " << _players[first]->_calcBoardsLifeTime / _players[first]->_rounds << " per turn." << endl;
+            cout << _players[!first]->_name << " procced " << _players[!first]->_calcBoardsLifeTime << " in total, ";
+            cout << "with an average of " << _players[!first]->_calcBoardsLifeTime / _players[!first]->_rounds << " per turn." << endl;
+            if (save)
+            {
+                save << _players[first]->_name << " procced " << _players[first]->_calcBoardsLifeTime << " in total, ";
+                save << "with an average of " << _players[first]->_calcBoardsLifeTime / _players[first]->_rounds << " per turn." << endl;
+                save << _players[!first]->_name << " procced " << _players[!first]->_calcBoardsLifeTime << " in total, ";
+                save << "with an average of " << _players[!first]->_calcBoardsLifeTime / _players[!first]->_rounds << " per turn." << endl;
+            }
             return;
         }
 
@@ -281,6 +292,7 @@ void readFile()
             cout << line << endl;
             ++i;
         }
+        cout << line << endl;
         while (getline(save, line))
         {
             cout << line << endl;
@@ -289,6 +301,9 @@ void readFile()
             {
                 cout << line << endl;
                 ++i;
+            }
+            if(i==11){
+                cout << line << endl;
             }
             //needs at least c++ 11
             std::this_thread::sleep_for(std::chrono::milliseconds(1500));

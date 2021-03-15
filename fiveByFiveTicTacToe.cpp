@@ -18,10 +18,7 @@ using std::fstream;
 #include <chrono>
 #include <thread>
 #include <memory>
-using std::make_shared;
-using std::make_unique;
 using std::shared_ptr;
-using std::unique_ptr;
 #include "player.h"
 #include "minimaxBot.h"
 #include "monteCarloBot.h"

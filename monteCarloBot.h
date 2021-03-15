@@ -6,7 +6,6 @@
 class MonteCarloBot : public Player
 {
 protected:
-    std::shared_ptr<BoardNode> root;
     double time = 5.0;
     void findNextMove(std::vector<std::vector<char>> &playingBoard);
     std::shared_ptr<BoardNode> selectionPhase(std::shared_ptr<BoardNode> root);
@@ -14,12 +13,14 @@ protected:
     void exspansionPhase(std::shared_ptr<BoardNode> node);
     int simulationPhase(std::shared_ptr<BoardNode> node);
     void backPropogation(std::shared_ptr<BoardNode> node, int state);
+
 public:
     MonteCarloBot();
+    // ~MonteCarloBot();
     void setTime();
-    int turn(std::vector<std::vector<char>> &playingBoard, char piece);
+    int turn(std::vector<std::vector<char>> &playingBoard, char piece) override;
 };
 
-// utc calc: ((data->wins + data->draws) / data->visits) + (sqrt(2) * sqrt(log(parrent->data->visits) / data->visits))
+// utc calc: ((wins + draws) / visits) + (sqrt(2) * sqrt(log(parrent->visits) / visits))
 
 std::shared_ptr<Player> makeMonteCarloBot();

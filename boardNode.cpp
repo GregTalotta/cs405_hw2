@@ -1,5 +1,7 @@
 #include "boardNode.h"
+#include <iostream>
 using std::rand;
+using std::vector;
 
 std::shared_ptr<BoardNode> BoardNode::getRandomChild()
 {
@@ -23,25 +25,25 @@ std::shared_ptr<BoardNode> BoardNode::getBestChild()
 BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p)
 {
     board = nboard;
-    data->piece = p;
+    piece = p;
 }
 
-BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p, std::shared_ptr<BoardNode> &pnode, int posx, int posy)
+BoardNode::BoardNode(std::vector<std::vector<char>> nboard, char p, std::shared_ptr<BoardNode> pnode, int posx, int posy)
 {
     board = nboard;
     parrent = pnode;
-    data->piece = p;
-    data->x = posx;
-    data->y = posy;
+    piece = p;
+    x = posx;
+    y = posy;
 }
 
 double BoardNode::value()
 {
-    if (data->visits == 0)
+    if (visits == 0)
     {
         return 0;
     }
-    return ((data->wins + data->draws) / data->visits);
+    return ((wins + (0.5 * draws)) / visits);
 }
 
 char BoardNode::changePiece(char piece)
@@ -53,16 +55,21 @@ char BoardNode::changePiece(char piece)
     return 'x';
 }
 
-void BoardNode::addLayer(std::shared_ptr<BoardNode> &base)
+bool BoardNode::validMove(vector<vector<char>> &playingBoard, int posx, int posy)
 {
-    for (int j = 0; j < board.size(); ++j)
+    return playingBoard[posy][posx] == ' ';
+}
+
+void BoardNode::addLayer(std::shared_ptr<BoardNode> base)
+{
+    for (int j = 0; j < base->board.size(); ++j)
     {
-        for (int i = 0; i < board[0].size(); ++i)
+        for (int i = 0; i < base->board.size(); ++i)
         {
-            if (board[j][i] == ' ')
+            if (validMove(board, i, j))
             {
-                board[j][i] = changePiece(data->piece);
-                children.push_back(std::make_unique<BoardNode>(BoardNode(board, changePiece(data->piece), base, i, j)));
+                board[j][i] = changePiece(base->piece);
+                children.push_back(std::make_unique<BoardNode>(BoardNode(board, changePiece(base->piece), base, i, j)));
                 board[j][i] = ' ';
             }
         }

@@ -19,13 +19,12 @@ using std::fstream;
 #include <thread>
 #include <memory>
 using std::make_shared;
-using std::shared_ptr;
 using std::make_unique;
+using std::shared_ptr;
 using std::unique_ptr;
 #include "player.h"
 #include "minimaxBot.h"
 #include "monteCarloBot.h"
-
 
 char getSingleChar();
 int getSingleInt(char min, char max);
@@ -193,7 +192,7 @@ void gameLoop(fstream &save, bool first)
         printBoard(playingBoard, cout);
         if (save)
             printBoard(playingBoard, save);
-        if ((player1State == 1) || (turn == 13))
+        if ((player1State == 2) || (turn == 13))
         {
             continue;
         }
@@ -220,13 +219,16 @@ void startGame()
     vector<vector<shared_ptr<Player>>> options = {
         {makePlayer(), makePlayer()},
         {makePlayer(), makeMinimaxBot()},
-        {makeMinimaxBot(), makeMinimaxBot()}};
+        {makeMinimaxBot(), makeMinimaxBot()},
+        {makePlayer(), makeMonteCarloBot()},
+        {makeMonteCarloBot(), makeMonteCarloBot()},
+        {makeMonteCarloBot(), makeMinimaxBot()}};
     for (int i = 0; i < options.size(); ++i)
     {
         cout << i + 1 << ": " << options[i][0]->_name << " vs " << options[i][1]->_name << endl;
     }
     cout << "Enter the number of what you would like to play." << endl;
-    int gameType = getSingleInt('1', '3') - 1;
+    int gameType = getSingleInt('1', '6') - 1;
     _players = options[gameType];
     srand(time(NULL));
     bool first = rand() % 2;

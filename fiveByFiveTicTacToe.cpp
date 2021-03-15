@@ -84,8 +84,7 @@ void printBoard(vector<vector<char>> &playingBoard, ostream &os)
             }
         }
     }
-    os << "\n\n"
-       << endl;
+    os << endl;
     return;
 }
 
@@ -188,6 +187,11 @@ void gameLoop(fstream &save, bool first)
             return;
         }
 
+        cout << _players[first]->_name << "'s turn. Piece: " << _players[first]->_piece << "\n\n"
+             << endl;
+        if (save)
+            save << _players[first]->_name << "'s turn. Piece: " << _players[first]->_piece << "\n\n"
+                 << endl;
         player1State = _players[first]->turn(playingBoard, _players[first]->_piece);
         printBoard(playingBoard, cout);
         if (save)
@@ -197,6 +201,11 @@ void gameLoop(fstream &save, bool first)
             continue;
         }
 
+        cout << _players[!first]->_name << "'s turn. Piece: " << _players[!first]->_piece << "\n\n"
+             << endl;
+        if (save)
+            save << _players[!first]->_name << "'s turn. Piece: " << _players[!first]->_piece << "\n\n"
+                 << endl;
         player2State = _players[!first]->turn(playingBoard, _players[!first]->_piece);
         printBoard(playingBoard, cout);
         if (save)

@@ -29,6 +29,10 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
 {
     std::shared_ptr<BoardNode> root = make_unique<BoardNode>(BoardNode(playingBoard, changePiece(piece)));
     root->addLayer(root);
+    if(root->children.size()==1){
+        playingBoard[root->children[0]->y][root->children[0]->x]=_piece;
+        return checkBoard(playingBoard, root->children[0]->x, root->children[0]->y, _piece, 4);
+    }
     if (time <= 0.0)
     {
         //cout some stuff
@@ -52,10 +56,6 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
         int playoutResult = simulationPhase(exploringNode);
         backPropogation(exploringNode, playoutResult);
         exploringNode.reset();
-        for(int i = 0; i < root->children.size(); ++i){
-            root->children[i]->children.clear();
-        }
-        cout << root->children[1].use_count() << endl;
         //end loop
         endTime = std::chrono::system_clock::now();
         diff = endTime - startTime;
@@ -89,7 +89,7 @@ double MonteCarloBot::utcValue(std::shared_ptr<BoardNode> node)
     {
         return 100000;
     }
-    return ((node->wins + (0.5 * node->draws)) / node->visits) + (sqrt(2) * sqrt(log(node->parrent->visits) / node->visits));
+    return ((node->wins + node->draws) / node->visits) + (sqrt(2) * sqrt(log(node->parrent->visits) / node->visits));
 }
 
 void MonteCarloBot::exspansionPhase(std::shared_ptr<BoardNode> node)
@@ -103,27 +103,31 @@ void MonteCarloBot::exspansionPhase(std::shared_ptr<BoardNode> node)
 int MonteCarloBot::simulationPhase(std::shared_ptr<BoardNode> node)
 {
     //This is the problem area
-    std::shared_ptr<BoardNode> tempNode = node;
-    int gameStatus = checkBoard(tempNode->board, tempNode->x, tempNode->y, node->piece, 4);
+    std::vector<vector<char>> tempBoard = node->board;
+    int pastStatus = checkBoard(node->parrent->board, node->parrent->x, node->parrent->y, node->parrent->piece, 4);
+    if(pastStatus == 2){
+        return pastStatus;
+    }
+    int gameStatus = checkBoard(tempBoard, node->x, node->y, node->piece, 4);
+    char curPiece =node->piece;
     while (gameStatus == 0)
     {
-        if (tempNode->children.size() == 0)
-        {
-            tempNode->addLayer(tempNode);
+        int rx = rand() % (int)node->board.size();
+        int ry = rand() % (int)node->board.size();
+        if(tempBoard[ry][rx]==' '){
+            tempBoard[ry][rx] = curPiece;
+            gameStatus = checkBoard(tempBoard, rx, ry, curPiece, 4);
+            curPiece=changePiece(curPiece);
         }
-        tempNode = tempNode->getRandomChild();
-        gameStatus = checkBoard(tempNode->board, tempNode->x, tempNode->y, node->piece, 4);
     }
-    node->children.clear();
     if (gameStatus == 3)
     {
         return gameStatus;
     }
-    if (_piece != tempNode->piece)
+    if (_piece == curPiece)
     {
         return 1;
     }
-    node->children.clear();
     return gameStatus;
 }
 

@@ -43,7 +43,7 @@ double BoardNode::value()
     {
         return 0;
     }
-    return ((wins + (0.5 * draws)) / visits);
+    return ((wins + draws) / visits);
 }
 
 char BoardNode::changePiece(char piece)

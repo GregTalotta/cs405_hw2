@@ -16,7 +16,6 @@ protected:
 
 public:
     MonteCarloBot();
-    // ~MonteCarloBot();
     void setTime();
     int turn(std::vector<std::vector<char>> &playingBoard, char piece) override;
 };

@@ -1,5 +1,5 @@
 #include "player.h"
-#include "tree.h"
+#include "boardNode.h"
 #include <memory>
 #include <chrono>
 
@@ -7,7 +7,7 @@ class MonteCarloBot : public Player
 {
 protected:
     std::shared_ptr<BoardNode> root;
-    double time = 0.0;
+    double time = 5.0;
     void findNextMove(std::vector<std::vector<char>> &playingBoard);
     std::shared_ptr<BoardNode> selectionPhase(std::shared_ptr<BoardNode> root);
     double utcValue(std::shared_ptr<BoardNode> node);

@@ -1,4 +1,4 @@
-#include "tree.h"
+#include "boardNode.h"
 using std::rand;
 
 std::shared_ptr<BoardNode> BoardNode::getRandomChild()

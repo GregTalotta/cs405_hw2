@@ -24,7 +24,7 @@ using std::make_unique;
 using std::unique_ptr;
 #include "player.h"
 #include "minimaxBot.h"
-#include "tree.h"
+#include "monteCarloBot.h"
 
 
 char getSingleChar();

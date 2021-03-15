@@ -2,12 +2,8 @@
 #define TREE_H
 
 #include <vector>
-#include <fstream>
-#include <string>
 #include <memory>
-#include <iostream>
 #include <cmath>
-#include <cstdlib>
 
 
 class BoardNode
@@ -24,9 +20,7 @@ public:
     double wins = 0.0;
     double draws = 0.0;
     std::shared_ptr<BoardNode> parrent;
-    //std::shared_ptr<nodeData> data = std::make_shared<nodeData>();
     std::vector<std::vector<char>> board;
-    // ~BoardNode();
     BoardNode(std::vector<std::vector<char>> nboard, char);
     BoardNode(std::vector<std::vector<char>> nboard, char, std::shared_ptr<BoardNode> pnode, int, int);
     std::vector<std::shared_ptr<BoardNode>> children;

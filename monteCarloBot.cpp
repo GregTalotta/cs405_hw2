@@ -3,15 +3,8 @@
 */
 
 #include "monteCarloBot.h"
-using std::cin;
-using std::cout;
-using std::endl;
-using std::getline;
-using std::istream;
-using std::make_unique;
-using std::ostream;
 using std::shared_ptr;
-using std::string;
+using std::make_shared;
 using std::vector;
 
 std::shared_ptr<Player> makeMonteCarloBot()
@@ -27,7 +20,7 @@ MonteCarloBot::MonteCarloBot()
 
 int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece)
 {
-    std::shared_ptr<BoardNode> root = make_unique<BoardNode>(BoardNode(playingBoard, changePiece(piece)));
+    std::shared_ptr<BoardNode> root = make_shared<BoardNode>(BoardNode(playingBoard, changePiece(piece)));
     root->addLayer(root);
     if(root->children.size()==1){
         playingBoard[root->children[0]->y][root->children[0]->x]=_piece;

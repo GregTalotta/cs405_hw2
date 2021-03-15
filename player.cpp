@@ -2,10 +2,7 @@
 using std::cin;
 using std::cout;
 using std::endl;
-using std::fstream;
 using std::getline;
-using std::istream;
-using std::ostream;
 using std::string;
 using std::vector;
 

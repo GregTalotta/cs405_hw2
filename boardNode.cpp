@@ -1,5 +1,4 @@
 #include "boardNode.h"
-#include <iostream>
 using std::rand;
 using std::vector;
 

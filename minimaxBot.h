@@ -1,3 +1,6 @@
+#ifndef MINIMAXBOT_H
+#define MINIMAXBOT_H
+
 #include "player.h"
 
 class MinimaxBot : public Player
@@ -14,3 +17,5 @@ public:
 };
 
 std::shared_ptr<Player> makeMinimaxBot();
+
+#endif

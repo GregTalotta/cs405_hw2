@@ -1,7 +1,10 @@
-#include "player.h"
-#include "boardNode.h"
+#ifndef MONTECARLOBOT_H
+#define MONTECARLOBOT_H
+
 #include <memory>
 #include <chrono>
+#include "player.h"
+#include "boardNode.h"
 
 class MonteCarloBot : public Player
 {
@@ -20,6 +23,7 @@ public:
     int turn(std::vector<std::vector<char>> &playingBoard, char piece) override;
 };
 
-// utc calc: ((wins + draws) / visits) + (sqrt(2) * sqrt(log(parrent->visits) / visits))
 
 std::shared_ptr<Player> makeMonteCarloBot();
+
+#endif

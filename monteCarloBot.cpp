@@ -48,11 +48,11 @@ int MonteCarloBot::turn(std::vector<std::vector<char>> &playingBoard, char piece
     while (diff.count() < _time)
     {
         shared_ptr<BoardNode> goodNode = selectionPhase(root);
-        if (true) //can exspand condition
+        if (goodNode->children.size() == 0) //can exspand condition
         {
             exspansionPhase(goodNode);
+            _calcBoards += goodNode->children.size();
         }
-        _calcBoards += goodNode->children.size();
         shared_ptr<BoardNode> exploringNode = goodNode;
         if (exploringNode->children.size() > 0)
         {
@@ -121,6 +121,7 @@ int MonteCarloBot::simulationPhase(std::shared_ptr<BoardNode> node)
         int rx = rand() % (int)node->board.size();
         int ry = rand() % (int)node->board.size();
         if(tempBoard[ry][rx]==' '){
+            ++_calcBoards;
             tempBoard[ry][rx] = curPiece;
             gameStatus = checkBoard(tempBoard, rx, ry, curPiece, 4);
             curPiece=changePiece(curPiece);

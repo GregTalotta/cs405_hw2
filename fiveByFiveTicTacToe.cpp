@@ -195,6 +195,7 @@ void gameLoop(fstream &save, bool first)
             return;
         }
 
+        //first player turn
         cout << "Currently " << _players[first]->_name << "'s turn. Piece: " << _players[first]->_piece << "\n\n"
              << endl;
         if (save)
@@ -209,6 +210,8 @@ void gameLoop(fstream &save, bool first)
             continue;
         }
 
+
+        //second player turn
         cout << "Currently " << _players[!first]->_name << "'s turn. Piece: " << _players[!first]->_piece << "\n\n"
              << endl;
         if (save)
